@@ -2,17 +2,22 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+
 import static java.lang.Math.abs;
 
 public class Main {
-
+    // data for exercises
     static int[] sumNums = {2, 4, 7, 22, 8, 5, 33, 12, 98,  4, 33,  7, 99, 24, 63, 86, 52, 39};
     static int[] simNums = {2, 1, 6, 22, 8, 5, 12, 98,  4, 33,  7, 99, 18, 24, 86, 63, 52};
     static int[] sortNums = {3, -2, 7, 1, 4, -4, 6, 9, -8, 5, 0};
     static boolean asc = true;
     static boolean desc = false;
     static int[][] matrix = {{5, 33, 14}, {55, 29, 6},{7, 18, 11}};
-
+    static int[] manyDuplicates = {3, 21, 44, 3, 7, 9, 21, 4, 44, 1, 0, 23, 7, 19, 9, 91, 1, 21, 44};
+    static String dupStr1 = "thequickbrownfoxjumpsoveralazydog";
+    static String dupStr2 = "nabyyzbeevweefgccdjkgfppgvvhhvfqrilmmckkldddjmfrsswxttxswwllmmnnnvottooex";
     public static void main(String[] args) {
 
         System.out.println("Sum of integers in array: " + ex1(sumNums));
@@ -25,6 +30,8 @@ public class Main {
 
         ex5(sortNums, asc);
         ex5(sortNums, desc);
+
+        ex6();
 
         ex7(7);
 
@@ -40,7 +47,12 @@ public class Main {
 
         ex10(matrix) ;  // print max and min values within matrix
 
-        // TODO more to add tomorrow
+        ex11("Supercalifragilisticexpialidocious");
+
+        ex12(manyDuplicates);
+
+        ex13(dupStr1);
+        ex13(dupStr2);
 
         ex14(656565);
         ex14(10205);
@@ -49,49 +61,81 @@ public class Main {
     }
 
     public static void ex14(int num) {
-        // Reverse any given number with arithmetic operations ?
-        // example: given INTEGER "123", return INTEGER "321"  (don't use string operations)
+        // Reverse any given integer number with arithmetic operations only
+        // example: given the integer "123", return integer "321"  (don't use string operations)
 
         int exp = 0; int n = num; double sum=0;
-        ArrayList<Integer> digits = new ArrayList<>();
+        ArrayList<Integer> digits = new ArrayList<>();  // use Integer array list to reverse digits of num
 
         while ( n >= 1 ) {
             exp++;
             digits.addLast(n - (n/10 * 10));
             n=n/10;
         }
+        // rebuild the integer using reversed digits
         for (Integer digit : digits) {
-            sum = sum + digit * Math.pow(10, --exp);
+            sum += digit * Math.pow(10, --exp);
         }
         System.out.println((int) sum);
     }
 
-    public void ex13() {
-        // Logic to count # of occurrences of chars in a string ?
-        // TODO: tomorrow - I've done this one already
+    public static void ex13(String str) {
+        // Count # of char occurrences in a string
+
+        // use HashMap k,v pairs to identify and count duplicate instances
+        //  key=character, value=# of occurrences
+        HashMap<Character, Integer> hm = new HashMap<>();
+
+        for (int i=0; i<str.length(); i++) {    // for each char in the string
+            if (hm.containsKey(str.charAt(i))) {    // if key is already present in map
+                hm.replace(str.charAt(i), hm.get(str.charAt(i))+1);     // increment the corresponding value
+            } else {
+                hm.put(str.charAt(i), 1);   // else do initial add of key/value pair
+            }
+        }
+        System.out.println(hm);
     }
 
-    public void ex12() {
+    public static void ex12(int[] a) {
         // Eliminate duplicates and print unique numbers in array
-        // TODO: tomorrow - I've done this one already
+
+        System.out.println("Has Duplicates: " + Arrays.toString(a));
+
+        HashSet<Integer> hs = new HashSet<>();  // given sets don't allow duplicates
+
+        for (int i : a) {           // for each char in the array
+            hs.add(i);              // add the value to the set (if not already present)
+        }
+        System.out.println("No Duplicates: " + hs);
+
     }
 
-    public void ex11() {
+    public static void ex11(String str) {
         // Reverse string/palindrome w/o using predefined reverse methods
-        // TODO: tomorrow - I've done this one already
 
+        System.out.print("Given string: " + str + "\nReversed: ");
+        char[] chArr = str.toCharArray();                       // make string char array
+        int strt=0; int end=chArr.length-1; char temp;      // set indices start and end of char array
+        while (strt < end) {        // loop until indices cross each other
+            temp = chArr[strt];
+            chArr[strt] = chArr[end];   // swap chars
+            chArr[end] = temp;
+            strt++; end--;              // increment/decrement indices
+        }
+
+        System.out.println(chArr);
     }
 
     public static void ex10(int [][] matrix) {
         // Print min and max values found in given multidimensional 2D array ( 3 x 3 )
 
         int max=matrix[0][0]; int min=matrix[0][0];
-        for (int j=0; j < matrix.length; j++) { // standard for "outer" loop
-            for (int[] ints : matrix) {         // enhanced for "inner" loop
-                if (ints[j] > max) {
+        for (int j=0; j < matrix.length; j++) { // standard For "outer" loop
+            for (int[] ints : matrix) {         // enhanced For "inner" loop
+                if (ints[j] > max) {        // determine if max
                     max = ints[j];
                 }
-                if (ints[j] < min) {
+                if (ints[j] < min) {        // determine if min
                     min = ints[j];
                 }
             }
@@ -109,7 +153,7 @@ public class Main {
         for (int i=n-2; i > 1; i=i-2) {
             if (n % i == 0) { return false; }       // if divisible by any odd number < n, not prime
         }
-        return true;        // passed the checks
+        return true;        // passed the checks - it's prime
     }
 
     public static int ex8(int n) {
@@ -140,9 +184,29 @@ public class Main {
         }
     }
 
-    public void ex6() {
+    public static void ex6() {
         // Demonstrate how to swap variables with and without using temp variable
-        // TODO: tomorrow
+
+        int x = 7;  int y = 5;  int temp = 0;
+
+        // print values before swap
+        System.out.println("With temp variable");
+        System.out.println("x: " + x + " | " + "y: " + y );
+        // using temp variable to swap A and B
+        temp = x;
+        x = y;
+        y = temp;
+        // print values after swap
+        System.out.println("x: " + x + " | " + "y: " + y );
+
+        // print values before swap
+        System.out.println("No temp variable");
+        System.out.println("x: " + x + " | " + "y: " + y );
+        x = x + y;
+        y = x - y;
+        x = x - y;
+        // print values after swap
+        System.out.println("x: " + x + " | " + "y: " + y );
     }
 
     public static void ex5(int[] a, boolean asc) {
@@ -205,7 +269,7 @@ public class Main {
         for (int h=0; h < 5; h++){              // do it 5 times starting at the given num
             for (int i = 1; i < 13; i++) {      // table up to including 12
                 prod = 0;
-                for (int j = 0; j < i; j++) {    // generate product with addition loop
+                for (int j = 0; j < i; j++) {    // generate product with addition loop only
                     prod = prod + num;
                 }
                 System.out.print("| " + num + "x" + i + "=" + prod + " " );
@@ -220,7 +284,7 @@ public class Main {
         // all the elements in the array.
         int sum=0;
         for (int x : a) {       // for each value x in given array a
-            sum = sum + x;      // accumulate values of elements
+            sum += x;      // accumulate values of elements
         }
         return sum;
     }
